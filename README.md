@@ -1,5 +1,7 @@
 # Validar Modelos
 
+https://medium.com/@alexandrepapan/validando-modelos-de-machine-learning-com-a-biblioteca-em-python-validar-modelos-5d56136f225
+
 ![Python versions](https://img.shields.io/pypi/pyversions/validar_modelos)
 [![GitHub Issues](https://img.shields.io/github/issues/Alexandre-Papandrea/validar_modelos)](https://github.com/Alexandre-Papandrea/validar_modelos/issues)
 [![License](https://img.shields.io/github/license/Alexandre-Papandrea/validar_modelos)](https://github.com/Alexandre-Papandrea/validar_modelos/blob/main/LICENSE)
