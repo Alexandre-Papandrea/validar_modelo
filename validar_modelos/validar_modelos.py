@@ -1,45 +1,27 @@
-## Manipulação de Dados
-
-
-import pandas as pd
-
-
-
-# Statisticas
-
-
-import statsmodels.api as sm
-from scipy.stats import probplot
-
-# Machine Learning
-
-
-from sklearn.exceptions import NotFittedError
-from sklearn.inspection import permutation_importance
-from sklearn.model_selection import cross_val_score, cross_val_predict
-from sklearn.metrics import (r2_score, mean_squared_error, mean_absolute_error, 
-                             mean_absolute_percentage_error, mean_squared_log_error, 
-                             make_scorer, roc_curve, accuracy_score, balanced_accuracy_score, 
-                             precision_score, recall_score, f1_score, roc_auc_score, 
-                             average_precision_score, confusion_matrix, auc, 
-                             precision_recall_curve)
-from sklearn.calibration import calibration_curve
-
-# Visualização
-
-
-import matplotlib.pyplot as plt
-import plotly.express as px
-import plotly.graph_objects as go
-import seaborn as sns
-from IPython.display import display, Markdown
-import ipywidgets as widgets
-
-
-############### INPUTS ########################################
 
 
 def inputs_validacao():
+    import pandas
+    import statsmodels.api
+    from scipy.stats import probplot
+    from sklearn.exceptions import NotFittedError
+    from sklearn.inspection import permutation_importance
+    from sklearn.model_selection import cross_val_score, cross_val_predict
+    from sklearn.metrics import (r2_score, mean_squared_error, mean_absolute_error, 
+                                 mean_absolute_percentage_error, mean_squared_log_error, 
+                                 make_scorer, roc_curve, accuracy_score, balanced_accuracy_score, 
+                                 precision_score, recall_score, f1_score, roc_auc_score, 
+                                 average_precision_score, confusion_matrix, auc, 
+                                 precision_recall_curve)
+    from sklearn.calibration import calibration_curve
+    import matplotlib.pyplot
+    import plotly.express
+    import plotly.graph_objects
+    import seaborn
+    from IPython.display import display, Markdown
+    import ipywidgets
+    import numpy
+
     
     descricoes = {
         'model': 'Este é o modelo já treinado, compatível com o framework do Scikit-Learn. Pode ser uma pipeline do Scikit-Learn com um modelo como último passo. Este modelo já aprendeu os padrões dos dados e está pronto para fazer previsões. Para problemas de regressão, é necessário que o modelo tenha o método .predict. Em problemas de classificação, além do .predict, também é necessário o método .predict_proba.',
@@ -55,21 +37,41 @@ def inputs_validacao():
     def exibir_descricao(input):
         display(Markdown(f"<div style='background: #ffffff; color: #000000; padding: 0.5em; margin: 0.5em 0; font-family: Arial, sans-serif;'><h2 style='background: #c0c0c0; display: inline-block; padding: 0.2em 0.5em;'>{input}</h2><p>{descricoes[input]}</p></div>"))
 
-    dropdown = widgets.Dropdown(options=list(descricoes.keys()))
-    widgets.interact(exibir_descricao, input=dropdown)
+    dropdown = ipywidgets.Dropdown(options=list(descricoes.keys()))
+    ipywidgets.interact(exibir_descricao, input=dropdown)
 
 #################### VALIDAR REGRESSÃO ##################################    
     
     
 def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repeats):
+    import pandas
+    import statsmodels.api
+    from scipy.stats import probplot
+    from sklearn.exceptions import NotFittedError
+    from sklearn.inspection import permutation_importance
+    from sklearn.model_selection import cross_val_score, cross_val_predict
+    from sklearn.metrics import (r2_score, mean_squared_error, mean_absolute_error, 
+                                 mean_absolute_percentage_error, mean_squared_log_error, 
+                                 make_scorer, roc_curve, accuracy_score, balanced_accuracy_score, 
+                                 precision_score, recall_score, f1_score, roc_auc_score, 
+                                 average_precision_score, confusion_matrix, auc, 
+                                 precision_recall_curve)
+    from sklearn.calibration import calibration_curve
+    import matplotlib.pyplot
+    import plotly.express
+    import plotly.graph_objects
+    import seaborn
+    from IPython.display import display, Markdown
+    import ipywidgets
+    import numpy
 
-### Transformando y_test e y_train em np.array caso não estejam nesse formato ainda.
+### Transformando y_test e y_train em numpy.array caso não estejam nesse formato ainda.
 
-    if not isinstance(y_test, np.ndarray):
-         y_test = np.array(y_test)
+    if not isinstance(y_test, numpy.ndarray):
+         y_test = numpy.array(y_test)
 
-    if not isinstance(y_train, np.ndarray):
-         y_train = np.array(y_train)
+    if not isinstance(y_train, numpy.ndarray):
+         y_train = numpy.array(y_train)
 
     
 ### Testando se o modelo já está treinado, caso contrário o modelo ou pipeline é treinada com os parâmetros padrões 
@@ -98,7 +100,7 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
         
         
         
-        return np.mean(np.abs((y_true - y_pred) / y_true)) * 100   
+        return numpy.mean(numpy.abs((y_true - y_pred) / y_true)) * 100   
     
     ###### Veio olhar o código né?? :D     
     def evaluation_metrics():
@@ -109,8 +111,8 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
         r2_train = r2_score(y_train, y_train_pred)
         r2_test = r2_score(y_test, y_pred)
 
-        rmse_train = np.sqrt(mean_squared_error(y_train, y_train_pred))
-        rmse_test = np.sqrt(mean_squared_error(y_test, y_pred))
+        rmse_train = numpy.sqrt(mean_squared_error(y_train, y_train_pred))
+        rmse_test = numpy.sqrt(mean_squared_error(y_test, y_pred))
 
         mae_train = mean_absolute_error(y_train, y_train_pred)
         mae_test = mean_absolute_error(y_test, y_pred)
@@ -130,42 +132,42 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
             cv_score = cross_val_score(model, X_train, y_train, cv=cv, scoring=scorer)
             cv_scores[metric_name] = cv_score.mean()
 
-        metrics = pd.DataFrame({
+        metrics = pandas.DataFrame({
             'Metric': ['R2', 'RMSE', 'MAE', 'MAPE'],
             'Train Value': [r2_train, rmse_train, mae_train, mape_train],
             'Test Value': [r2_test, rmse_test, mae_test, mape_test],
             'CV Score': [cv_scores['r2'], -cv_scores['rmse'], -cv_scores['mae'], -cv_scores['mape']]
         })
 
-        fig = go.Figure(data=[go.Table(header=dict(values=['Metrica', 'Valor Dados Treino', 'Valor Dados Teste', 'Score Validação Cruzada']),
+        fig = plotly.graph_objects.Figure(data=[plotly.graph_objects.Table(header=dict(values=['Metrica', 'Valor Dados Treino', 'Valor Dados Teste', 'Score Validação Cruzada']),
                                        cells=dict(values=[metrics['Metric'], metrics['Train Value'], metrics['Test Value'], metrics['CV Score']]))])
         fig.show()  
 
     ### Função para Valor Real Versus Previsto 
 
-    import plotly.graph_objs as go
+
     from plotly.subplots import make_subplots
 
     def grafico_previsto_vs_real():
         fig = make_subplots(rows=1, cols=2, subplot_titles=("Previsto vs Real - Treino", "Previsto vs Real - Teste"))
 
         fig.add_trace(
-            go.Scatter(x=y_train, y=y_train_pred, mode='markers'),
+            plotly.graph_objects.Scatter(x=y_train, y=y_train_pred, mode='markers'),
             row=1, col=1
         )
 
         fig.add_trace(
-            go.Scatter(x=[y_train.min(), y_train.max()], y=[y_train.min(), y_train.max()], mode='lines'),
+            plotly.graph_objects.Scatter(x=[y_train.min(), y_train.max()], y=[y_train.min(), y_train.max()], mode='lines'),
             row=1, col=1
         )
 
         fig.add_trace(
-            go.Scatter(x=y_test, y=y_pred, mode='markers'),
+            plotly.graph_objects.Scatter(x=y_test, y=y_pred, mode='markers'),
             row=1, col=2
         )
 
         fig.add_trace(
-            go.Scatter(x=[y_test.min(), y_test.max()], y=[y_test.min(), y_test.max()], mode='lines'),
+            plotly.graph_objects.Scatter(x=[y_test.min(), y_test.max()], y=[y_test.min(), y_test.max()], mode='lines'),
             row=1, col=2
         )
 
@@ -177,23 +179,23 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
 
         residuos_treino = y_train - y_train_pred
         fig.add_trace(
-            go.Scatter(x=y_train_pred, y=residuos_treino, mode='markers'),
+            plotly.graph_objects.Scatter(x=y_train_pred, y=residuos_treino, mode='markers'),
             row=1, col=1
         )
 
         fig.add_trace(
-            go.Scatter(x=[y_train_pred.min(), y_train_pred.max()], y=[0, 0], mode='lines'),
+            plotly.graph_objects.Scatter(x=[y_train_pred.min(), y_train_pred.max()], y=[0, 0], mode='lines'),
             row=1, col=1
         )
 
         residuos_teste = y_test - y_pred
         fig.add_trace(
-            go.Scatter(x=y_pred, y=residuos_teste, mode='markers'),
+            plotly.graph_objects.Scatter(x=y_pred, y=residuos_teste, mode='markers'),
             row=1, col=2
         )
 
         fig.add_trace(
-            go.Scatter(x=[y_pred.min(), y_pred.max()], y=[0, 0], mode='lines'),
+            plotly.graph_objects.Scatter(x=[y_pred.min(), y_pred.max()], y=[0, 0], mode='lines'),
             row=1, col=2
         )
 
@@ -206,13 +208,13 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
 
         residuos_treino = y_train - y_train_pred
         fig.add_trace(
-            go.Histogram(x=residuos_treino, nbinsx=nbins),
+            plotly.graph_objects.Histogram(x=residuos_treino, nbinsx=nbins),
             row=1, col=1
         )
 
         residuos_teste = y_test - y_pred
         fig.add_trace(
-            go.Histogram(x=residuos_teste, nbinsx=nbins),
+            plotly.graph_objects.Histogram(x=residuos_teste, nbinsx=nbins),
             row=1, col=2
         )
 
@@ -220,31 +222,31 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
         fig.show()
 
     def qq_plot():
-        fig, ax = plt.subplots(1, 2, figsize=(15, 5))
+        fig, ax = matplotlib.pyplot.subplots(1, 2, figsize=(15, 5))
 
         residuos_treino = y_train - y_train_pred
-        sm.qqplot(residuos_treino, line ='45', ax=ax[0])
+        statsmodels.api.qqplot(residuos_treino, line ='45', ax=ax[0])
         ax[0].set_title('QQ Plot Resíduos - Treino')
 
         residuos_teste = y_test - y_pred
-        sm.qqplot(residuos_teste, line ='45', ax=ax[1])
+        statsmodels.api.qqplot(residuos_teste, line ='45', ax=ax[1])
         ax[1].set_title('QQ Plot Resíduos - Teste')
 
-        plt.show()
+        matplotlib.pyplot.show()
             
 
     def qq_plot():
-        fig, ax = plt.subplots(1, 2, figsize=(15, 5))
+        fig, ax = matplotlib.pyplot.subplots(1, 2, figsize=(15, 5))
 
         residuos_treino = y_train - y_train_pred
-        sm.qqplot(residuos_treino, line ='45', ax=ax[0])
+        statsmodels.api.qqplot(residuos_treino, line ='45', ax=ax[0])
         ax[0].set_title('QQ Plot Resíduos - Treino')
 
         residuos_teste = y_test - y_pred
-        sm.qqplot(residuos_teste, line ='45', ax=ax[1])
+        statsmodels.api.qqplot(residuos_teste, line ='45', ax=ax[1])
         ax[1].set_title('QQ Plot Resíduos - Teste')
 
-        plt.show()
+        matplotlib.pyplot.show()
             
             
         
@@ -263,11 +265,11 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
             result_train = permutation_importance(model, X_train, y_train_pred, scoring=scorer, n_repeats=10, random_state=42)
             result_test = permutation_importance(model, X_test, y_test, scoring=scorer, n_repeats=10, random_state=42)
             
-            importance_df_train = pd.DataFrame({'Variável': X_train.columns,
+            importance_df_train = pandas.DataFrame({'Variável': X_train.columns,
                                            'Importância Treino': result_train.importances_mean,
                                            'Importância Desvio Padrão Treino': result_train.importances_std})
             
-            importance_df_test = pd.DataFrame({'Variável': X_test.columns,
+            importance_df_test = pandas.DataFrame({'Variável': X_test.columns,
                                            'Importância Teste': result_test.importances_mean,
                                            'Importância Desvio Padrão Teste': result_test.importances_std})
                                            
@@ -277,16 +279,16 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
             results_train[metric_name] = importance_df_train
             results_test[metric_name] = importance_df_test
             
-            importance_difference = pd.merge(importance_df_train, importance_df_test, on="Variável", suffixes=('_train', '_test'))
+            importance_difference = pandas.merge(importance_df_train, importance_df_test, on="Variável", suffixes=('_train', '_test'))
             importance_difference["Diferença"] = abs(importance_difference['Importância Treino'] - importance_difference['Importância Teste'])
 
-            fig = go.Figure()
-            fig.add_trace(go.Bar(name='Treino', 
+            fig = plotly.graph_objects.Figure()
+            fig.add_trace(plotly.graph_objects.Bar(name='Treino', 
                                  x=importance_df_train['Variável'], 
                                  y=importance_df_train['Importância Treino'], 
                                  error_y=dict(array=importance_df_train['Importância Desvio Padrão Treino'])))
 
-            fig.add_trace(go.Bar(name='Teste', 
+            fig.add_trace(plotly.graph_objects.Bar(name='Teste', 
                                  x=importance_df_test['Variável'], 
                                  y=importance_df_test['Importância Teste'], 
                                  error_y=dict(array=importance_df_test['Importância Desvio Padrão Teste'])))
@@ -294,7 +296,7 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
             fig.show()
 
 
-            fig_diff = go.Figure(data=[go.Table(header=dict(values=['Variável', 'Diferença']),
+            fig_diff = plotly.graph_objects.Figure(data=[plotly.graph_objects.Table(header=dict(values=['Variável', 'Diferença']),
                                                 cells=dict(values=[importance_difference['Variável'], importance_difference['Diferença']]))])
             fig_diff.show()
         
@@ -347,9 +349,9 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
             '''
         }
     
-        text_widget = widgets.Textarea(
+        text_widget = ipywidgets.Textarea(
             value=explanations[plot_type],
-            layout=widgets.Layout(width="100%", height="200px")
+            layout=ipywidgets.Layout(width="100%", height="200px")
         )
 
         display(text_widget)
@@ -371,19 +373,41 @@ def validar_regressao(model, X_train, y_train, X_test, y_test, cv, nbins, n_repe
         elif plot_type ==  'Importancia das Features Permutadas':
             permutation_feature_importance()
         
-    dropdown = widgets.Dropdown(options=['Métricas de Avaliação','Plot do Valor Real vs Previsto', 'Plot Residuos', 'Histograma Residuos', 'Q-Q Plot','Importancia das Features Permutadas'])
-    interact(plot_explanation, plot_type=dropdown)
+    dropdown = ipywidgets.Dropdown(options=['Métricas de Avaliação','Plot do Valor Real vs Previsto', 'Plot Residuos', 'Histograma Residuos', 'Q-Q Plot','Importancia das Features Permutadas'])
+    ipywidgets.interact(plot_explanation, plot_type=dropdown)
     
     
     
 def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, nbins, n_repeats):
+    import numpy
+
+    
+    import pandas
+    import statsmodels.api
+    from scipy.stats import probplot
+    from sklearn.exceptions import NotFittedError
+    from sklearn.inspection import permutation_importance
+    from sklearn.model_selection import cross_val_score, cross_val_predict
+    from sklearn.metrics import (r2_score, mean_squared_error, mean_absolute_error, 
+                                 mean_absolute_percentage_error, mean_squared_log_error, 
+                                 make_scorer, roc_curve, accuracy_score, balanced_accuracy_score, 
+                                 precision_score, recall_score, f1_score, roc_auc_score, 
+                                 average_precision_score, confusion_matrix, auc, 
+                                 precision_recall_curve)
+    from sklearn.calibration import calibration_curve
+    import matplotlib.pyplot
+    import plotly.express
+    import plotly.graph_objects
+    import seaborn
+    from IPython.display import display, Markdown
+    import ipywidgets
 
 
-    if not isinstance(y_test, np.ndarray):
-         y_test = np.array(y_test)
+    if not isinstance(y_test, numpy.ndarray):
+         y_test = numpy.array(y_test)
 
-    if not isinstance(y_train, np.ndarray):
-         y_train = np.array(y_train)
+    if not isinstance(y_train, numpy.ndarray):
+         y_train = numpy.array(y_train)
 
     
     
@@ -449,19 +473,19 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
             cv_score = cross_val_score(model, X_train, y_train, cv=cv, scoring=scorer,n_jobs=-1)
             cv_scores[metric_name] = cv_score.mean()
 
-        metrics = pd.DataFrame({
+        metrics = pandas.DataFrame({
             'Métrica': ['Acurácia','Acurácia Balanceada','Precisão','Recall', 'F1-Score', 'AUC-ROC', 'PR AUC Score'],
             'Valor Treino': [acc_train, b_acc_train,prec_train, rec_train, f1_train, auc_train, pr_auc_train],
             'Valor Teste': [acc_test, b_acc_test,prec_test, rec_test, f1_test, auc_test, pr_auc_test],
             'Score Validação Cruzada': [cv_scores['Acurácia'],cv_scores['Acurácia Balanceada'],cv_scores['Precisão'], cv_scores['Recall'], cv_scores['F1-Score'], cv_scores['AUC-ROC'], cv_scores['PR AUC Score']]
         })
 
-        fig = go.Figure(data=[go.Table(header=dict(values=['Métrica', 'Valor Treino', 'Valor Teste', 'Score Validação Cruzada']),
+        fig = plotly.graph_objects.Figure(data=[plotly.graph_objects.Table(header=dict(values=['Métrica', 'Valor Treino', 'Valor Teste', 'Score Validação Cruzada']),
                                        cells=dict(values=[metrics['Métrica'], metrics['Valor Treino'], metrics['Valor Teste'], metrics['Score Validação Cruzada']]))])
         fig.show() 
 
     def matriz_confusao():
-        fig, ax = plt.subplots(1, 2, figsize=(15, 5))
+        fig, ax = matplotlib.pyplot.subplots(1, 2, figsize=(15, 5))
 
         cm_train = confusion_matrix(y_train, y_train_pred)
         acc_train = accuracy_score(y_train, y_train_pred)
@@ -469,7 +493,7 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
         prec_train = precision_score(y_train, y_train_pred)
         rec_train = recall_score(y_train, y_train_pred)
 
-        sns.heatmap(cm_train, annot=True, fmt="d", ax=ax[0], cmap='Blues', cbar=False, xticklabels=[0, 1], yticklabels=[0, 1])
+        seaborn.heatmap(cm_train, annot=True, fmt="d", ax=ax[0], cmap='Blues', cbar=False, xticklabels=[0, 1], yticklabels=[0, 1])
         ax[0].set_title(f'Treino\nAcurácia: {acc_train:.2f}\nAcurácia Balanceada: {b_acc_train:.2f}\nPrecisão: {prec_train:.2f}\nRecall: {rec_train:.2f}')
         ax[0].set_xlabel('Predito')
         ax[0].set_ylabel('Real')
@@ -480,15 +504,15 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
         prec_test = precision_score(y_test, y_pred)
         rec_test = recall_score(y_test, y_pred)
 
-        sns.heatmap(cm_test, annot=True, fmt="d", ax=ax[1], cmap='Blues', cbar=False, xticklabels=[0, 1], yticklabels=[0, 1])
+        seaborn.heatmap(cm_test, annot=True, fmt="d", ax=ax[1], cmap='Blues', cbar=False, xticklabels=[0, 1], yticklabels=[0, 1])
         ax[1].set_title(f'Teste\nAcurácia: {acc_test:.2f}\nAcurácia Balanceada: {b_acc_test:.2f}\nPrecisão: {prec_test:.2f}\nRecall: {rec_test:.2f}')
         ax[1].set_xlabel('Predito')
         ax[1].set_ylabel('Real')
 
-        plt.show()
+        matplotlib.pyplot.show()
 
     def roc_auc_curve():
-        fig, ax = plt.subplots(1, 2, figsize=(15, 5))
+        fig, ax = matplotlib.pyplot.subplots(1, 2, figsize=(15, 5))
 
         fpr_train, tpr_train, _ = roc_curve(y_train, y_train_prob)
         roc_auc_train = auc(fpr_train, tpr_train)
@@ -515,12 +539,12 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
         ax[1].set_title('Curva ROC - Teste')
         ax[1].legend(loc="lower right")
 
-        plt.show()
+        matplotlib.pyplot.show()
         
         
         
     def precision_recall():
-        fig, ax = plt.subplots(1, 2, figsize=(15, 5))
+        fig, ax = matplotlib.pyplot.subplots(1, 2, figsize=(15, 5))
 
         precision_train, recall_train, _ = precision_recall_curve(y_train, y_train_prob)
         average_precision_train = average_precision_score(y_train, y_train_prob)
@@ -548,26 +572,26 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
         ax[1].set_xlim([0.0, 1.0])
         ax[1].set_title('Curva de Precisão-Recall: AP={0:0.2f}'.format(average_precision_test))
 
-        plt.show()
+        matplotlib.pyplot.show()
         
     def histograma_probabilidade():
-        df_treino = pd.DataFrame({'Probabilidade Prevista': y_train_prob, 'Rótulo Verdadeiro': y_train, 'Dados': 'Treino'})
-        df_teste = pd.DataFrame({'Probabilidade Prevista': y_test_prob, 'Rótulo Verdadeiro': y_test, 'Dados': 'Teste'})
+        df_treino = pandas.DataFrame({'Probabilidade Prevista': y_train_prob, 'Rótulo Verdadeiro': y_train, 'Dados': 'Treino'})
+        df_teste = pandas.DataFrame({'Probabilidade Prevista': y_test_prob, 'Rótulo Verdadeiro': y_test, 'Dados': 'Teste'})
 
-        df = pd.concat([df_treino, df_teste])
+        df = pandas.concat([df_treino, df_teste])
 
-        fig = px.histogram(df, x='Probabilidade Prevista', color='Rótulo Verdadeiro', facet_col='Dados', nbins=50, opacity=0.7,
+        fig = plotly.express.histogram(df, x='Probabilidade Prevista', color='Rótulo Verdadeiro', facet_col='Dados', nbins=50, opacity=0.7,
                            labels={'Probabilidade Prevista': 'Probabilidade Prevista', 'Rótulo Verdadeiro': 'Rótulo Verdadeiro'},
                            title='Histograma de Probabilidade Prevista')
         fig.show()
 
     def plot_densidade_probabilidade():
-        df_treino = pd.DataFrame({'Probabilidade Prevista': y_train_prob, 'Rótulo Verdadeiro': y_train, 'Dados': 'Treino'})
-        df_teste = pd.DataFrame({'Probabilidade Prevista': y_test_prob, 'Rótulo Verdadeiro': y_test, 'Dados': 'Teste'})
+        df_treino = pandas.DataFrame({'Probabilidade Prevista': y_train_prob, 'Rótulo Verdadeiro': y_train, 'Dados': 'Treino'})
+        df_teste = pandas.DataFrame({'Probabilidade Prevista': y_test_prob, 'Rótulo Verdadeiro': y_test, 'Dados': 'Teste'})
 
-        df = pd.concat([df_treino, df_teste])
+        df = pandas.concat([df_treino, df_teste])
 
-        fig = px.histogram(df, x='Probabilidade Prevista', color='Rótulo Verdadeiro', facet_col='Dados', nbins=50, opacity=0.7,
+        fig = plotly.express.histogram(df, x='Probabilidade Prevista', color='Rótulo Verdadeiro', facet_col='Dados', nbins=50, opacity=0.7,
                            marginal='box', histnorm='density', barmode='overlay',
                            labels={'Probabilidade Prevista': 'Probabilidade Prevista', 'Rótulo Verdadeiro': 'Rótulo Verdadeiro'},
                            title='Densidade de Probabilidade Prevista')
@@ -580,10 +604,10 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
         prob_verdadeira_treino, prob_prevista_treino = calibration_curve(y_train, y_train_prob, n_bins=10)
         prob_verdadeira_teste, prob_prevista_teste = calibration_curve(y_test, y_test_prob, n_bins=10)
 
-        fig = go.Figure()
+        fig = plotly.graph_objects.Figure()
 
-        fig.add_trace(go.Scatter(x=prob_prevista_treino, y=prob_verdadeira_treino, mode='lines+markers', name='Treino'))
-        fig.add_trace(go.Scatter(x=prob_prevista_teste, y=prob_verdadeira_teste, mode='lines+markers', name='Teste'))
+        fig.add_trace(plotly.graph_objects.Scatter(x=prob_prevista_treino, y=prob_verdadeira_treino, mode='lines+markers', name='Treino'))
+        fig.add_trace(plotly.graph_objects.Scatter(x=prob_prevista_teste, y=prob_verdadeira_teste, mode='lines+markers', name='Teste'))
         fig.add_shape(type='line', x0=0, x1=1, y0=0, y1=1, yref='y', xref='x', line=dict(color='Black', dash='dash'))
 
         fig.update_layout(title='Plot de Calibração de Probabilidade', xaxis_title='Probabilidade Prevista', yaxis_title='Probabilidade Verdadeira')
@@ -608,11 +632,11 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
             result_train = permutation_importance(model, X_train, y_train, scoring=scorer, n_repeats=10, random_state=42)
             result_test = permutation_importance(model, X_test, y_test, scoring=scorer, n_repeats=10, random_state=42)
 
-            importance_df_train = pd.DataFrame({'Variável': X_train.columns,
+            importance_df_train = pandas.DataFrame({'Variável': X_train.columns,
                                                'Importância Treino': result_train.importances_mean,
                                                'Importância Desvio Padrão Treino': result_train.importances_std})
 
-            importance_df_test = pd.DataFrame({'Variável': X_test.columns,
+            importance_df_test = pandas.DataFrame({'Variável': X_test.columns,
                                                'Importância Teste': result_test.importances_mean,
                                                'Importância Desvio Padrão Teste': result_test.importances_std})
 
@@ -622,16 +646,16 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
             results_train[metric_name] = importance_df_train
             results_test[metric_name] = importance_df_test
 
-            importance_difference = pd.merge(importance_df_train, importance_df_test, on="Variável", suffixes=('_train', '_test'))
+            importance_difference = pandas.merge(importance_df_train, importance_df_test, on="Variável", suffixes=('_train', '_test'))
             importance_difference["Diferença"] = abs(importance_difference['Importância Treino'] - importance_difference['Importância Teste'])
 
-            fig = go.Figure()
-            fig.add_trace(go.Bar(name='Treino', 
+            fig = plotly.graph_objects.Figure()
+            fig.add_trace(plotly.graph_objects.Bar(name='Treino', 
                                  x=importance_df_train['Variável'], 
                                  y=importance_df_train['Importância Treino'], 
                                  error_y=dict(array=importance_df_train['Importância Desvio Padrão Treino'])))
 
-            fig.add_trace(go.Bar(name='Teste', 
+            fig.add_trace(plotly.graph_objects.Bar(name='Teste', 
                                  x=importance_df_test['Variável'], 
                                  y=importance_df_test['Importância Teste'], 
                                  error_y=dict(array=importance_df_test['Importância Desvio Padrão Teste'])))
@@ -639,7 +663,7 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
             fig.show()
 
 
-            fig_diff = go.Figure(data=[go.Table(header=dict(values=['Variável', 'Diferença']),
+            fig_diff = plotly.graph_objects.Figure(data=[plotly.graph_objects.Table(header=dict(values=['Variável', 'Diferença']),
                                                 cells=dict(values=[importance_difference['Variável'], importance_difference['Diferença']]))])
             fig_diff.show()
 
@@ -722,9 +746,9 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
 
     
 
-        text_widget = widgets.Textarea(
+        text_widget = ipywidgets.Textarea(
             value=explanations[plot_type],
-            layout=widgets.Layout(width="100%", height="200px")
+            layout=ipywidgets.Layout(width="100%", height="200px")
         )
         display(text_widget)
 
@@ -764,6 +788,6 @@ def validar_classificacao_binaria(model, X_train, y_train, X_test, y_test, cv, n
 
             permutation_feature_importance()
 
-    dropdown = widgets.Dropdown(options=['Métricas de Avaliação', 'Matriz de Confusão', 'Curva AUC-ROC', 'Curva de Precisão-Recall', 'Histograma de Probabilidade', 'Plot de Densidade de Probabilidade', 'Plot de Calibração de Probabilidade', 'Importância das Features Permutadas'])
+    dropdown = ipywidgets.Dropdown(options=['Métricas de Avaliação', 'Matriz de Confusão', 'Curva AUC-ROC', 'Curva de Precisão-Recall', 'Histograma de Probabilidade', 'Plot de Densidade de Probabilidade', 'Plot de Calibração de Probabilidade', 'Importância das Features Permutadas'])
 
-    interact(plot_explanation, plot_type=dropdown)
+    ipywidgets.interact(plot_explanation, plot_type=dropdown)
